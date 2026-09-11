@@ -22,11 +22,11 @@ android {
         buildConfigField(
             "String",
             "APPS_SCRIPT_URL",
-            '"${project.findProperty("APPS_SCRIPT_URL") ?: ""}"')
+            "\"${project.findProperty("APPS_SCRIPT_URL") ?: ""}\"")
         buildConfigField(
             "String",
             "SECRET_TOKEN",
-            '"${project.findProperty("SECRET_TOKEN") ?: ""}"')
+            "\"${project.findProperty("SECRET_TOKEN") ?: ""}\"")
     }
 
     buildTypes {
