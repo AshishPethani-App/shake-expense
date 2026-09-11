@@ -1,5 +1,4 @@
-@rem Gradle startup script for Windows
-@if "%DEBUG%"=="" @echo off
-@setlocal
-set DIRNAME=%~dp0
-call "%DIRNAME%gradle\wrapper\gradle-wrapper.jar" %*
+@echo off
+echo Gradle Wrapper JAR is not included in this archive.
+echo Install Gradle 8.9 and run: gradle assembleDebug
+exit /b 1
