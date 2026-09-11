@@ -5,7 +5,7 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-  workflow_dispatch:  # allows manual trigger from GitHub UI
+  workflow_dispatch:
 
 jobs:
   build:
@@ -17,43 +17,50 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Set up Java 17 (required by Android Gradle Plugin)
+      # 2. Set up Java 17
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: gradle
 
-      # 3. Grant execute permission to Gradle wrapper
-      - name: Grant Gradle execute permission
-        run: chmod +x gradlew
+      # 3. Fix Gradle wrapper line endings
+      - name: Fix Gradle wrapper
+        run: |
+          sed -i 's/\r$//' gradlew
+          chmod +x gradlew
 
-      # 4. Cache Gradle files for faster builds
-      - name: Cache Gradle packages
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+      # 4. Verify Gradle wrapper
+      - name: Verify Gradle wrapper
+        run: |
+          ls -la gradlew
+          file gradlew
+          head -n 1 gradlew
 
-      # 5. Build the debug APK
+      # 5. Build Debug APK
       - name: Build Debug APK
         run: ./gradlew assembleDebug --stacktrace
         env:
           APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
 
-      # 6. Rename APK to include build number
+      # 6. Verify APK exists
+      - name: Verify APK
+        run: |
+          echo "Checking APK output..."
+          ls -la app/build/outputs/apk/debug/
+          test -f app/build/outputs/apk/debug/app-debug.apk
+
+      # 7. Rename APK
       - name: Rename APK
         run: |
           mkdir -p apk-output
-          cp app/build/outputs/apk/debug/app-debug.apk apk-output/ShakeExpense-v1.0-build${{ github.run_number }}.apk
+          cp app/build/outputs/apk/debug/app-debug.apk \
+            apk-output/ShakeExpense-v1.0-build${{ github.run_number }}.apk
+
           echo "APK_PATH=apk-output/ShakeExpense-v1.0-build${{ github.run_number }}.apk" >> $GITHUB_ENV
 
-      # 7. Upload APK as downloadable artifact
+      # 8. Upload APK
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -61,9 +68,9 @@ jobs:
           path: apk-output/ShakeExpense-v1.0-build${{ github.run_number }}.apk
           retention-days: 30
 
-      # 8. Print success summary
+      # 9. Build summary
       - name: Build Summary
         run: |
-          echo "## Build Successful! " >> $GITHUB_STEP_SUMMARY
+          echo "## Build Successful!" >> $GITHUB_STEP_SUMMARY
           echo "**APK:** ShakeExpense-v1.0-build${{ github.run_number }}.apk" >> $GITHUB_STEP_SUMMARY
-          echo "**Download:** Go to Actions tab -> this run -> Artifacts section" >> $GITHUB_STEP_SUMMARY
+          echo "**Download:** Go to Actions → this run → Artifacts" >> $GITHUB_STEP_SUMMARY
