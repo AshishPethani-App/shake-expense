@@ -68,7 +68,7 @@ fun SettingsScreen(onBack: () -> Unit, viewModel: SettingsViewModel = hiltViewMo
                 }
             }
             SettingSection(title = "Sync") {
-                Text("Last synced: \${state.lastSynced}", color = TextSecondary, fontSize = 13.sp)
+                Text("Last synced: ${state.lastSynced}", color = TextSecondary, fontSize = 13.sp)
             }
             SettingSection(title = "About") { Text("Shake Expense v1.0.0", color = TextSecondary) }
         }

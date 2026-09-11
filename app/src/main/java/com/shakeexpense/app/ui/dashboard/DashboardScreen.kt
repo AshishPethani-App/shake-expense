@@ -64,10 +64,10 @@ fun DashboardScreen(
                     Column(modifier = Modifier.padding(24.dp)) {
                         Text("Today's Expenses", color = OnPrimary.copy(alpha = 0.85f), fontSize = 14.sp)
                         Spacer(Modifier.height(4.dp))
-                        Text("₹ \${fmt.format(state.todayTotal)}",
+                        Text("₹ ${fmt.format(state.todayTotal)}",
                             color = OnPrimary, fontSize = 36.sp, fontWeight = FontWeight.Bold)
                         Spacer(Modifier.height(2.dp))
-                        Text("\${state.todayCount} expense\${if (state.todayCount != 1) "s" else ""}",
+                        Text("${state.todayCount} expense${if (state.todayCount != 1) "s" else ""}",
                             color = OnPrimary.copy(alpha = 0.75f), fontSize = 14.sp)
                     }
                 }
@@ -121,6 +121,6 @@ fun ExpenseRow(expense: Expense) {
             Text(expense.description, fontWeight = FontWeight.Medium, color = TextPrimary, fontSize = 15.sp)
             Text(expense.createdAt.take(10), fontSize = 12.sp, color = TextSecondary)
         }
-        Text("₹\${fmt.format(expense.amount)}", fontWeight = FontWeight.SemiBold, color = Primary, fontSize = 16.sp)
+        Text("₹${fmt.format(expense.amount)}", fontWeight = FontWeight.SemiBold, color = Primary, fontSize = 16.sp)
     }
 }
