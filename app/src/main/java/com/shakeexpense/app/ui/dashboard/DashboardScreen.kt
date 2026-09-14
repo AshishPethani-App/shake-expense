@@ -22,6 +22,7 @@ import com.shakeexpense.app.ui.theme.*
 import java.text.NumberFormat
 import java.util.Locale
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
     onAddExpense: () -> Unit,
