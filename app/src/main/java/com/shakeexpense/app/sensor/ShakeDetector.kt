@@ -40,9 +40,9 @@ class ShakeDetector(private val onShake: () -> Unit) : SensorEventListener {
         val x = event.values[0]
         val y = event.values[1]
         val z = event.values[2]
-        val gForce = sqrt(x * x + y * y + z * z) / SensorManager.GRAVITY_EARTH
+        val acceleration = sqrt(x * x + y * y + z * z)
 
-        if (gForce < getThreshold()) return
+        if (acceleration < getThreshold()) return
 
         if (now - firstShakeTime > SHAKE_COUNT_RESET_TIME_MS) {
             shakeCount = 0
