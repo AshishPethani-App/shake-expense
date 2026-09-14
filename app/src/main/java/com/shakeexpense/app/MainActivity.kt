@@ -1,6 +1,7 @@
 package com.shakeexpense.app
 
 import android.Manifest
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -52,9 +53,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onNewIntent(intent: android.content.Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        intent?.let(::handleIntent)
+        handleIntent(intent)
     }
 
     private fun handleIntent(intent: android.content.Intent?) {
